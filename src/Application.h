@@ -15,6 +15,8 @@ public:
 	virtual bool update();
 	virtual void draw();
 	
+    int window_width;
+    int window_height;
 	GLFWwindow* m_window;
 };
 

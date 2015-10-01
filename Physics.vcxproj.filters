@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Gizmos.cpp" />
+    <ClCompile Include="src\gl_core_4_4.c" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Physics.cpp" />
+    <ClCompile Include="src\RigidBodyDynamics.cpp">
+      <Filter>Tutorials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CollisionShapeHierarchies.cpp">
+      <Filter>Tutorials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshBasedCollision.cpp">
+      <Filter>Tutorials</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Application.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Gizmos.h" />
+    <ClInclude Include="src\gl_core_4_4.h" />
+    <ClInclude Include="src\Physics.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Tutorials">
+      <UniqueIdentifier>{56330ffa-5fd4-4b46-abc8-8a39828b5c35}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
