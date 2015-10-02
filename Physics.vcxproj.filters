@@ -16,6 +16,19 @@
     <ClCompile Include="src\MeshBasedCollision.cpp">
       <Filter>Tutorials</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\JointsAndSprings.cpp">
+      <Filter>Tutorials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RagdollPhysics.cpp">
+      <Filter>Tutorials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MotorsAndImpulse.cpp">
+      <Filter>Tutorials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayerController.cpp">
+      <Filter>Tutorials</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h" />
@@ -23,6 +36,7 @@
     <ClInclude Include="src\Gizmos.h" />
     <ClInclude Include="src\gl_core_4_4.h" />
     <ClInclude Include="src\Physics.h" />
+    <ClInclude Include="src\Render.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tutorials">

@@ -336,6 +336,7 @@ void Renderer::PushMesh(Mesh* mesh, Material* material, mat4 transform)
     item.material = material;
     item.transform = transform;
 
+    //NOTE(aidan): right now can only draw a maximum of 4096 things per frame!
     if ( queue_used < queue_allocated )
     {
         render_queue[queue_used++] = item;

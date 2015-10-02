@@ -66,7 +66,7 @@ bool Physics::startup()
     setupVisualDebugger();
 
     //*********SELECT TUTORIAL TO RUN HERE*********
-    setupMBCTutorial();
+    setupPCTutorial();
 
     renderer = new Renderer();
 
@@ -108,7 +108,6 @@ void Physics::shutdown()
 
 bool Physics::update()
 {
-
     mouse_down = glfwGetMouseButton(m_window, 0) != 0;
 
     if (Application::update() == false)
@@ -119,6 +118,7 @@ bool Physics::update()
     Gizmos::clear();
 
     float dt = (float)glfwGetTime();
+    delta_time = dt;
     glfwSetTime(0.0);
 
     vec4 white(1);
@@ -139,7 +139,7 @@ bool Physics::update()
 
 
     //*********SELECT TUTORIAL TO RUN HERE*********
-    updateMBCTutorial();
+    updatePCTutorial();
 
 
     last_mouse_down = mouse_down;
@@ -158,6 +158,46 @@ void Physics::draw()
     glfwPollEvents();
 }
 
+void AddWidget(PxShape* shape, PxRigidActor* actor, vec4 geo_color)
+{
+    PxTransform full_transform = PxShapeExt::getGlobalPose(*shape, *actor);
+    vec3 actor_position(full_transform.p.x, full_transform.p.y, full_transform.p.z);
+    glm::quat actor_rotation(full_transform.q.w,
+        full_transform.q.x,
+        full_transform.q.y,
+        full_transform.q.z);
+    glm::mat4 rot(actor_rotation);
+
+    PxGeometryType::Enum geo_type = shape->getGeometryType();
+
+    switch (geo_type)
+    {
+    case (PxGeometryType::eBOX) :
+    {
+        PxBoxGeometry geo;
+        shape->getBoxGeometry(geo);
+        vec3 extents(geo.halfExtents.x, geo.halfExtents.y, geo.halfExtents.z);
+        Gizmos::addAABBFilled(actor_position, extents, geo_color, &rot);
+    } break;
+    case (PxGeometryType::eCAPSULE) :
+    {
+        PxCapsuleGeometry geo;
+        shape->getCapsuleGeometry(geo);
+        Gizmos::addCapsule(actor_position, geo.halfHeight * 2, geo.radius, 16, 16, geo_color, &rot);
+    } break;
+    case (PxGeometryType::eSPHERE) :
+    {
+        PxSphereGeometry geo;
+        shape->getSphereGeometry(geo);
+        Gizmos::addSphereFilled(actor_position, geo.radius, 16, 16, geo_color, &rot);
+    } break;
+    case (PxGeometryType::ePLANE) :
+    {
+
+    } break;
+    }
+
+}
 
 void Physics::renderGizmos()
 {
@@ -165,7 +205,7 @@ void Physics::renderGizmos()
     PxU32 actor_count = m_physics_scene->getNbActors(desiredTypes);
     PxActor** actor_list = new PxActor*[actor_count];
     m_physics_scene->getActors(desiredTypes, actor_list, actor_count);
-
+    
     vec4 geo_color(1, 0, 0, 1);
     for (int actor_index = 0;
         actor_index < (int)actor_count;
@@ -179,48 +219,12 @@ void Physics::renderGizmos()
             PxShape** shapes = new PxShape*[shape_count];
             rigid_actor->getShapes(shapes, shape_count);
 
-
             for (int shape_index = 0;
                 shape_index < (int)shape_count;
                 ++shape_index)
             {
                 PxShape* curr_shape = shapes[shape_index];
-                PxTransform full_transform = PxShapeExt::getGlobalPose(*curr_shape, *rigid_actor);
-                vec3 actor_position(full_transform.p.x, full_transform.p.y, full_transform.p.z);
-                glm::quat actor_rotation(full_transform.q.w,
-                    full_transform.q.x,
-                    full_transform.q.y,
-                    full_transform.q.z);
-                glm::mat4 rot(actor_rotation);
-
-                PxGeometryType::Enum geo_type = curr_shape->getGeometryType();
-
-                switch (geo_type)
-                {
-                case (PxGeometryType::eBOX) :
-                {
-                    PxBoxGeometry geo;
-                    curr_shape->getBoxGeometry(geo);
-                    vec3 extents(geo.halfExtents.x, geo.halfExtents.y, geo.halfExtents.z);
-                    Gizmos::addAABBFilled(actor_position, extents, geo_color, &rot);
-                } break;
-                case (PxGeometryType::eCAPSULE) :
-                {
-                    PxCapsuleGeometry geo;
-                    curr_shape->getCapsuleGeometry(geo);
-                    Gizmos::addCapsule(actor_position, geo.halfHeight * 2, geo.radius, 16, 16, geo_color);
-                } break;
-                case (PxGeometryType::eSPHERE) :
-                {
-                    PxSphereGeometry geo;
-                    curr_shape->getSphereGeometry(geo);
-                    Gizmos::addSphereFilled(actor_position, geo.radius, 16, 16, geo_color);
-                } break;
-                case (PxGeometryType::ePLANE) :
-                {
-
-                } break;
-                }
+                AddWidget(curr_shape, rigid_actor, geo_color);
             }
 
             delete[]shapes;
@@ -229,5 +233,31 @@ void Physics::renderGizmos()
 
     delete[] actor_list;
 
+    int articulation_count = m_physics_scene->getNbArticulations();
+
+    for (int a = 0; a < articulation_count; ++a)
+    {
+        PxArticulation* articulation;
+        m_physics_scene->getArticulations(&articulation, 1, a);
+
+        int link_count = articulation->getNbLinks();
+
+        PxArticulationLink** links = new PxArticulationLink*[link_count];
+        articulation->getLinks(links, link_count);
+
+        for (int l = 0; l < link_count; ++l)
+        {
+            PxArticulationLink* link = links[l];
+            int shape_count = link->getNbShapes();
+
+            for (int s = 0; s < shape_count; ++s)
+            {
+                PxShape* shape;
+                link->getShapes(&shape, 1, s);
+                AddWidget(shape, link, geo_color);
+            }
+        }
+        delete[] links;
+    }
 }
 

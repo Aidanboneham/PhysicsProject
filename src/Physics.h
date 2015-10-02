@@ -28,7 +28,7 @@ public:
     PxFoundation* m_physics_foundation;
     PxPhysics* m_physics;
     PxScene* m_physics_scene;
-
+    
     PxDefaultErrorCallback m_default_error_callback;
     PxDefaultAllocator m_default_allocator;
     PxSimulationFilterShader m_default_filter_shader;
@@ -36,9 +36,11 @@ public:
     PxMaterial* m_physics_material;
     PxMaterial* m_box_material;
     PxCooking* m_physics_cooker;
+    PxControllerManager* m_controller_manager;
 
     FlyCamera m_camera;
 
+    float delta_time;
 
     Mesh* meshes;
     Material* materials;
@@ -73,6 +75,11 @@ public:
     //Motors and Impulse
     void setupMAITutorial();
     void updateMAITutorial();
+    PxD6Joint* d6joint;
+
+    //Player Controllers
+    void setupPCTutorial();
+    void updatePCTutorial();
 
     //Events and Triggers
     void setupEATTutorial();
