@@ -318,7 +318,7 @@ Material GetMaterial(FBXFile * file, const char* name)
 
 Renderer::Renderer()
 {
-    LoadShader("./shaders/main_shader.vs", 0, "./shaders/main_shader.fs", &main_shader);
+    LoadShader("./data/shaders/main_shader.vs", 0, "./data/shaders/main_shader.fs", &main_shader);
     queue_allocated = 4096;
     queue_used = 0;
     render_queue = new RenderItem[queue_allocated];

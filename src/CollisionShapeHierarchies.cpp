@@ -4,7 +4,7 @@
 void Physics::setupCSHTutorial()
 {
     FBXFile file;
-    file.load("./models/tank/battle_tank.fbx");
+    file.load("./data/models/tank/battle_tank.fbx");
 
     material_mesh_count = file.getMaterialCount();
     meshes = new Mesh[material_mesh_count];
