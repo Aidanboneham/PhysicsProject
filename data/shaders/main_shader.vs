@@ -15,7 +15,6 @@ out vec2 frag_texcoord;
 uniform mat4 view_proj;
 uniform mat4 model;
 uniform mat4 model_view_proj;
-uniform mat4 proj_view;
 
 void main()
 {
